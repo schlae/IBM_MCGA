@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "mcga722x8300")(type "KiCad")(uri "${KIPRJMOD}/mcga722x8300.kicad_sym")(options "")(descr ""))
+)
