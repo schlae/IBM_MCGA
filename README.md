@@ -125,4 +125,8 @@ Traces were placed starting at a footprint pad, following the underlying
 metal, and tying to all other connected pads, given a net name, and then
 back-propagated to the schematic (the reverse of the usual KiCAD process).
 
+## Future Plans
 
+* Reverse engineer the video formatter gate array (at some point)
+* Tidy up the schematics so they are hierarchical and easier to understand
+* Look into generating Verilog from the KiCAD netlist
