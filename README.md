@@ -38,12 +38,12 @@ appears to be on an internal IBM gate array process. Unfortunately, during
 decapping, the top metal layer was removed, so the netlist could not be
 extracted. The second,
 [72x8205-sla6330j](https://siliconpr0n.org/map/ibm/72x8205-sla6330j/), has
-not yet been reverse engineered.
+been reverse engineered: see the mcga72x8205flat subdirectory.
 
 It is a Seiko SLA6330 gate array. It contains 3,312 basic cells with 4
 transistors each. The BCs are arranged in 144 rows and 23 columns.
 
-## MCGA Notes
+## 72x8300 (Memory Controller Gate Array) Notes
 
 Based on the reverse engineering efforts, new information about MCGA has been
 discovered.
@@ -83,6 +83,43 @@ understood.
 The counter speedup modes basically inject a clock signal into the upper
 four bits of each counter as well as the lower four bits, so the counter
 runs out quicker. This is an aid for the factory test in the chip tester.
+
+### 72x8205 (Video Formatter Gate Array) Notes
+
+The extended mode register, 0x1A, has two undocumented bits:
+
+| Bit | Function |
+|-----|----------|
+| 1   | Unknown, may force 256 color mode even with other resolutions. |
+| 0   | Unknown, may force border color onto entire display. |
+
+Additional manufacturing test registers are available by accessing the
+following locations:
+
+* Register 0x19 - Manufacturing register address
+* Register 0x18 - Manufacturing register data
+
+To access a particular manufacturing test register, load an address
+into register 0x19 and read or write the contents at 0x18.
+
+Manufacturing test registers are:
+
+| Address | Register |
+|---------|----------|
+| 0       | Not implemented |
+| 1       | Read only. Contains latest contents of data being sent to the RAMDAC (P[7:0] pins). |
+| 2       | Read only. Contains latest contents of data being received from VRAM (CP[7:0] pins). |
+| 3       | Read only. Contains unknown 16-color mode data from formatting logic. |
+| 4       | Write only register, see below for operation. |
+
+The write only register at address 4 implements only the following two bits:
+
+| Bit | Function |
+|-----|----------|
+| 0   | Manufacturing hard reset equivalent to the reset pin. Write a '1' to put the device in reset, write a '0' to take it out of reset. |
+| 1   | Write a '1' to disable a large number of outputs, including ones going to the RAMDAC. |
+
+
 
 ## Reverse Engineering Process Information
 
@@ -127,6 +164,4 @@ back-propagated to the schematic (the reverse of the usual KiCAD process).
 
 ## Future Plans
 
-* Reverse engineer the video formatter gate array (at some point)
-* Tidy up the schematics so they are hierarchical and easier to understand
 * Look into generating Verilog from the KiCAD netlist
